@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+    body {
+      background-color: #FAF8F5;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: #333333;
+    }
+
+    .navbar {
+      background-color: #f5b616;
+      padding: 15px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #2e5cf2;
+    }
+    .logo-container {
+      font-weight: bold;
+      font-size: 20px;
+      color: #1A3020;
+      cursor: pointer;
+    }
+    .nav-links { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: center; }
+    
+    .nav-btn {
+      background-color: #2e5cf2; 
+      color: #ffffff; 
+      padding: 8px 18px; 
+      border-radius: 20px; 
+      font-weight: 500; 
+      border: none; 
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.2s;
+    }
+    .nav-btn:hover { background-color: #1232b3; }
+
+    .container { max-width: 100%; margin: 0px auto; padding: 0 20px; text-align: left; }
+    h1 { font-size: 32px; font-weight: 600; margin: 0 0 8px 0; color: #1A3020; }
+    .subtitle { font-size: 16px; color: #555555; margin: 0 0 30px 0; }
+    
+    .search-input-box {
+      width: 100%;
+      max-width: 400px;
+      padding: 10px 15px;
+      font-size: 15px;
+      border: 2px solid #2e5cf2;
+      border-radius: 8px;
+      box-sizing: border-box;
+      margin-bottom: 20px;
+    }
+    .search-input-box:focus {
+      outline: none;
+      border-color: #f5b616;
+    }
+
+    .tool-list { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 20px; }
+    
+    .tool-card { background-color: #FFFDF0; border: 2px solid #2e5cf2; border-radius: 12px; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+    .tool-info { flex-grow: 1; }
+    .tool-info h3 { margin: 0 0 5px 0; font-size: 18px; color: #2e5cf2; }
+    .tool-info p { margin: 0 0 8px 0; font-size: 14px; color: #666666; }
+ 
+    .contact-details { font-size: 12px; color: #555555; line-height: 1.4; border-top: 1px dashed #CDD1C7; padding-top: 8px; }
+    .tool-type { font-weight: bold; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; color: #f5b616; background: #1A3020; padding: 2px 8px; border-radius: 4px; display: inline-block; margin-bottom: 6px; }
+
+    .delete-btn { background-color: #f5b616; color: #1A3020; border: 1px solid #2e5cf2; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 13px; font-weight: bold; transition: background-color 0.2s; margin-left: 15px; }
+    .delete-btn:hover { background-color: #d19a0f; color: white; }
+
+    .action-links { display: flex; gap: 15px; margin-top: 30px; }
+    .add-more-btn { background-color: #2e5cf2; color: white; border: 2px solid #f5b616; padding: 12px 24px; border-radius: 30px; font-weight: bold; cursor: pointer; text-decoration: none; text-align: center; }
+    .add-more-btn:hover { background-color: #1232b3; }
+
+    /* Terms and Conditions Popup Window Styles */
+    .terms-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex; justify-content: center; align-items: center;
+      z-index: 2000;
+    }
+    .terms-box {
+      background-color: #ffffff;
+      border: 4px solid #2e5cf2;
+      border-radius: 16px;
+      padding: 30px;
+      width: 100%;
+      max-width: 450px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    .terms-title { font-size: 20px; font-weight: bold; color: #2e5cf2; margin-bottom: 10px; }
+    .terms-content {
+      height: 180px; overflow-y: scroll;
+      border: 1px solid #CDD1C7; border-radius: 8px;
+      padding: 10px; font-size: 13px; line-height: 1.5;
+      background: #FFFDF073; text-align: left; margin-bottom: 15px;
+    }
+    .checkbox-container {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 20px; font-size: 14px; font-weight: 600; text-align: left;
+    }
+  </style>
+<title> CommunityForge Listings </title>
+</head>
+<body>
+
+<div class="navbar">
+    <div class="logo-container" onclick="navigatePage('index.html')">CommunityForge</div>
+    <div class="nav-links">
+      <button class="nav-btn" onclick="navigatePage('index.html')">Home</button>
+      <button class="nav-btn" onclick="navigatePage('tools.html')">Items</button>
+      <button class="nav-btn" onclick="navigatePage('skills.html')">Skill</button>
+      <button class="nav-btn" onclick="navigatePage('listing.html')">Listings</button>
+    </div>
+</div>
+
+<div class="container">
+    <h1>All Community Listings</h1>
+    <p class="subtitle">Browse both items and skills submitted by the community in one space.</p>
+    
+    <input type="text" id="searchBar" class="search-input-box" placeholder="Search listings..." oninput="filterListings()">
+
+    <div class="tool-list" id="displayDirectory"></div>
+
+    <div class="action-links">
+        <div class="add-more-btn" onclick="navigatePage('tools.html')">List an Item</div>
+        <div class="add-more-btn" onclick="navigatePage('skills.html')">List a Skill</div>
+    </div>
+</div>
+
+<!-- Terms & Conditions Disclaimer Popup Box -->
+<div class="terms-overlay" id="termsModal" style="display: none;">
+  <div class="terms-box">
+    <div class="terms-title">CommunityForge Guidelines</div>
+    <div class="terms-content">
+      <strong>1. Respect and Safety:</strong> Treat items and community mentors with utmost care. You are responsible for returning items in their original condition.<br><br>
+      <strong>2. Liability Waiver:</strong> CommunityForge handles resource coordination indexing only. Borrowers and learners agree to look after their own safety when using tools or attending skill training sessions.<br><br>
+      <strong>3. No Cost Policy:</strong> Lending and mentoring options on this interface layer are entirely free of cost. Voluntary tokens of appreciation remain optional.
+    </div>
+    <div class="checkbox-container">
+      <input type="checkbox" id="agreeCheckbox">
+      <label for="agreeCheckbox">I agree to the Terms & Conditions</label>
+    </div>
+    <button class="add-more-btn" style="width:100%; border:none; padding:12px;" onclick="confirmTermsAndSend()">Done</button>
+  </div>
+</div>
+<script>
+  function navigatePage(url) {
+    if (url) { window.location.href = url; }
+  }
+
+  function getOrCreateUserId() {
+    var userId = localStorage.getItem('forgeUserId');
+    if (!userId) {
+      userId = 'user_' + Math.random().toString(36).substr(2, 9) + Date.now();
+      localStorage.setItem('forgeUserId', userId);
+    }
+    return userId;
+  }
+
+  var allListings = [];
+  var currentTargetId = null; 
+
+  function loadListings() {
+    allListings = JSON.parse(localStorage.getItem('communityForgeListings')) || [];
+    renderListings(allListings);
+  }
+
+  function renderListings(currentListings) {
+    var directory = document.getElementById('displayDirectory');
+    var currentUserId = getOrCreateUserId();
+    directory.innerHTML = "";
+
+    if (currentListings.length === 0) {
+      directory.innerHTML = "<p style='color: #666666;'>No listings yet. Go back to add something!</p>";
+      return;
+    }
+
+    currentListings.forEach(function(listing) {
+      var card = document.createElement('div');
+      card.className = 'tool-card';
+      var safeId = (listing.id || '').replace(/[^a-z0-9]/gi, '_');
+      var apiNamespace = "communityforge2026"; 
+
+      var controlButtonHtml = "";
+      var viewsHtml = "";
+
+      if (listing.ownerId === currentUserId) {
+        controlButtonHtml = `<button class="delete-btn" onclick="deleteListing('${listing.id}')">Delete</button>`;
+        viewsHtml = `
+          <div style="font-size: 12px; color: #2e5cf2; font-weight: bold; margin-bottom: 8px;">
+            <span id="views-${listing.id}">Loading views...</span> views
+          </div>
+        `;
+      } else {
+        var actionText = "Borrow";
+        if (listing.type && listing.type.toLowerCase() === "skill") { actionText = "Learn"; }
+        controlButtonHtml = `<button class="delete-btn" style="background-color: #2e5cf2; color: white; border-color: #f5b616;" onclick="openTerms('${listing.id}')">${actionText}</button>`;
+        viewsHtml = ""; 
+      }
+
+      card.innerHTML = `
+        <div class="tool-info">
+          <span class="tool-type">${listing.type || 'Item'}</span>
+          <h3>${listing.name}</h3>
+          <p>${listing.desc}</p>
+          ${viewsHtml}
+          <div class="contact-details">
+            <div><strong>Listed by:</strong> ${listing.creatorName || 'A Neighbor'}</div>
+            <div><strong>Email:</strong> ${listing.email}</div>
+            <div><strong>Phone:</strong> ${listing.phone}</div>
+            <div><strong>Location:</strong> ${listing.address}</div>
+          </div>
+        </div>
+        ${controlButtonHtml}
+      `;
+      directory.appendChild(card);
+      
+      fetch(`https://jasoncameron.dev{apiNamespace}/${safeId}`)
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          var viewSpan = document.getElementById(`views-${listing.id}`);
+          if (viewSpan && data && data.value) { viewSpan.innerText = data.value; }
+        })
+        .catch(function() {
+          var viewSpan = document.getElementById(`views-${listing.id}`);
+          if (viewSpan) { viewSpan.innerText = "1"; }
+        });
+    });
+  }
+
+  function filterListings() {
+    var filterText = document.getElementById('searchBar').value.toLowerCase();
+    var filteredListings = allListings.filter(function(listing) {
+      return (listing.name && listing.name.toLowerCase().includes(filterText)) ||
+             (listing.desc && listing.desc.toLowerCase().includes(filterText)) ||
+             (listing.type && listing.type.toLowerCase().includes(filterText));
+    });
+    renderListings(filteredListings);
+  }
+
+  function deleteListing(id) {
+    var currentListings = JSON.parse(localStorage.getItem('communityForgeListings')) || [];
+    var updated = currentListings.filter(item => item.id !== id);
+    localStorage.setItem('communityForgeListings', JSON.stringify(updated));
+    loadListings();
+  }
+
+  function openTerms(id) {
+    currentTargetId = id;
+    document.getElementById('agreeCheckbox').checked = false;
+    document.getElementById('termsModal').style.display = 'flex';
+  }
+
+  function confirmTermsAndSend() {
+    if (!document.getElementById('agreeCheckbox').checked) {
+      alert("You must agree to the Terms & Conditions to complete your request!");
+      return;
+    }
+    document.getElementById('termsModal').style.display = 'none';
+    executeBorrowEmail(currentTargetId);
+  }
+
+  function executeBorrowEmail(id) {
+    var target = allListings.find(item => item.id === id);
+    if (!target) return;
+    
+    var borrowerName = localStorage.getItem('savedUsername') || "A Neighbor";
+    var borrowerEmail = localStorage.getItem('savedEmail') || "Not provided";
+    var borrowerPhone = localStorage.getItem('savedPhone') || "Not provided";
+    var borrowerZip = localStorage.getItem('savedZip') || "Not provided";
+    
+    if (!target.email || target.email === "Not provided") {
+      alert("This listing does not have a valid email address!");
+      return;
+    }
+
+    var verb = (target.type && target.type.toLowerCase() === "skill") ? "teach" : "lend";
+    var subject = "CommunityForge Request: " + borrowerName + " wants to " + (verb === 'teach' ? 'learn your ' : 'borrow your ') + target.name;
+    
+    var yesHref = "mailto:" + borrowerEmail + "?subject=" + encodeURIComponent("RE: CommunityForge Request Approved!") + "&body=" + encodeURIComponent("Hi " + borrowerName + ",\n\nYes! I would be happy to " + verb + " you my '" + target.name + "'. Let's coordinate a pickup/meeting time.\n\nBest,");
+    var noHref = "mailto:" + borrowerEmail + "?subject=" + encodeURIComponent("RE: CommunityForge Request Status Update") + "&body=" + encodeURIComponent("Hi " + borrowerName + ",\n\nSorry, I am unable to share my '" + target.name + "' right now. Hope to help out next time!\n\nBest,");
+
+    var body = 
+      "Hello,\n\n" +
+      "Good news! A neighbor on CommunityForge wants to interact with your listing: '" + target.name + "'.\n\n" +
+      "The requestor has explicitly accepted your community terms and conditions guidelines. Here is their profile content:\n" +
+      "- Name: " + borrowerName + "\n" +
+      "- Email: " + borrowerEmail + "\n" +
+      "- Phone: " + borrowerPhone + "\n" +
+      "- Location Zip: " + borrowerZip + "\n\n" +
+      "WOULD YOU LIKE TO SHARE THIS RESOURCE? PLEASE CLICK ONE OF THE ACTIONS BELOW TO REPLY INSTANTLY:\n\n" +
+      "👉 CLICK HERE TO CHOOSE [ YES ] :\n" + yesHref + "\n\n" +
+      "👉 CLICK HERE TO CHOOSE [ NO ] :\n" + noHref + "\n\n" +
+      "Best regards,\n" +
+      "CommunityForge Automation Management System";
+
+    window.location.href = "mailto:" + target.email + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+  }
+
+  window.onload = function() {
+    loadListings();
+  };
+</script>
+</body>
+</html>
